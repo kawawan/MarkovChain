@@ -15,6 +15,7 @@
     \usepackage{verbatim}
     \usepackage{subfigure}
     \usepackage{proof}
+
  
 
     %
@@ -93,10 +94,10 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-この文書は卒研セミナーでのマルコフセミナーについて，毎回その要点をまとめるものである．気を付けなければいけないと思ったことは詳しく書く．また僕自身にとって簡単であるようなことは省略する．
+この文書は卒研セミナーでのマルコフ連鎖のセミナーについて，毎回その要点をまとめるものである．気を付けなければいけないと思ったことは詳しく書く．また僕自身にとって簡単であるようなことは省略する．なお用いる教科書はPaul G. Hoel,Sideney C. Port, Charles J. Stone 著のIntroduction to Stochastic Processes．
 \end{abstract}
 
-\section{マルコフ系列の定義と簡単な性質，そしていくつかの例}
+\section{マルコフ鎖の定義と簡単な性質，いくつかの例}\footnote{Markov Chainの訳は本によってさまざま．マルコフ系列だったりマルコフ過程だったりします．ここでは読んでいる教科書の用語を直訳することを意識してマルコフ鎖，マルコフ連鎖とします．}
 
 \subsection{マルコフ性の定義}
 $\mathcal{J}$は有限個の状態の集合とする．$\mathcal{J}$のことを{\bf 状態空間}とよぶ．離散時間$n = 0,1,2,\cdots$が与えられていて$X_n$はそれぞれの時刻$n$における状態を表すものする．($n \ge 0$)．この状態を数値に対応させることで$X_n$はある確率空間上の確率変数とみなす．
@@ -107,12 +108,52 @@ $\mathcal{J}$は有限個の状態の集合とする．$\mathcal{J}$のことを
 	\end{defn}
 \end{screen}
 
-マルコフ性の式
+マルコフ性の式を言葉で説明してみよう．離散時間が与えられていてそれぞれの時刻で様々な状態を取るというモデルがある．計測開始時点から現在までの状態が分かっているとする．このとき，次の計測時点での状態が$x_{n+1}$であるような確率は，現在の状態のみに依存する．現在の状態さえわかっていれば過去の状態は一つ次の未来がどんな状態であるのかという確率には影響を与えない．
 
+\begin{screen}
+	\begin{defn}
+		条件付き確率$\mathbb{P}(X_{n+1} = y | X_n = x)$のことを鎖の遷移確率(transition probabolities of the chain)という．
+	\end{defn}
+\end{screen}
 
+この文書では変化しない遷移確率(stationary transition probability)を持つマルコフ鎖を考える．すなわち，$\mathbb{P}(X_{n+1} = y | X_n = x)$が$n$に依存しないようなマルコフ鎖のみを考える．$n$に依存しないとは，もっと具体的に言うと，
+\[\mathbb{P}(X_{1} = y | X_0 = x) = \mathbb{P}(X_{2} = y | X_1 = x) = \cdots = \mathbb{P}(X_{n+1} = y | X_n = x)\]
+が成り立つことを意味する．
+\begin{screen}
+	\begin{defn}(マルコフ鎖の定義)
+		確率変数列$(X_n)_{n \in \NN}$がマルコフ鎖をなすとは，これらの確率変数たちがマルコフ性をもち，変化しない遷移確率をもつときにいう．
+	\end{defn}
+\end{screen}
 
+\subsection{二つの状態をもつマルコフ鎖}
+\begin{table}[h]
+\caption{機械の状態と遷移の確率の様子}
+\begin{center}
+	\begin{tabular}{|c|c|c|} \hline
+		$n$th day & 遷移確率 & $(n+1)$th day \\ \hline
+		正常 & $\xrightarrow{q}$ & 故障 \\ \cline{2-3}
+		\, & $\xrightarrow{1-q}$ & 正常 \\ \hline
+		故障 & $\xrightarrow{p}$ & 正常 \\ \cline{2-3}
+		\, & $\xrightarrow{1-p}$ & 故障 \\ \hline
+	\end{tabular}
+\end{center}
 
-
+\end{table}
+ある機械は1日の始まりに正常に動くか故障しているかチェックされる．表のように$n$日目の状態と$n+1$日目の状態の遷移の確率が定義されている．$0 \leq p,q \leq 1$である．機械が正常である時を$1$，故障しているときを$0$とする．$(X_n)_{n \in \NN}$を$n$日目の機械の状態を表すとする．このようにすると$(X_n)_{n \in \NN}$はマルコフ性を持つ確率変数であると考えられる（あくまでそんな気がする！）から，次のような計算ができる．
+\[\mathbb{P}(X_{n+1} = 1|X_n = 0) = p\]
+\[\mathbb{P}(X_{n+1} = 0|X_n = 1) = q\]
+\[\mathbb{P}(X_0 = 0) =: \pi_0(0)\]
+とおくと，
+\begin{align*}
+	\mathbb{P}(X_{n+1} = 0) &= \mathbb{P}(X_n = 0 \, \text{and}\, X_{n+1} = 0) + \mathbb{P}(X_n = 1 \, \text{and} \, X_{n+1} = 0) \\
+	&= \mathbb{P}(X_n = 0)\mathbb{P}(X_{n+1} = 0 | X_{n} = 0) + \mathbb{P}(X_n = 1)\mathbb{P}(X_{n+1} = 0 | X_{n} = 1)\\
+	&= \cdots \\
+	&=(1-p-q)\mathbb{P}(X_n = 0) + q \\
+\end{align*}
+というふうに漸化式が得られるので，一般項を求める計算をすると，
+\begin{equation}
+\mathbb{P}(X_n = 0) = (1-p-q)^n\pi_0(0) + q \sum_{j=0}^{n-1}(1-p-q)^j
+\end{equation}
 
 
 
