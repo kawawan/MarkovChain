@@ -104,7 +104,9 @@ $\mathcal{J}$は有限個の状態の集合とする．$\mathcal{J}$のことを
 \begin{screen}
 	\begin{defn}[マルコフ性]
 		確率空間上(確率測度は$\mathbb{P}$)で定義された確率変数列$(X_n)_{n \in \NN}$がマルコフ性を満たすとは，次を満たすことである．
-		\[\mathbb{P}(X_{n+1} = x_{n+1} | X_0 = x_0 , \cdots , X_n = x_n) = \mathbb{P}(X_{n+1} = x_{n+1} | X_n = x_n)\]
+\begin{equation}
+\mathbb{P}(X_{n+1} = x_{n+1} | X_0 = x_0 , \cdots , X_n = x_n) = \mathbb{P}(X_{n+1} = x_{n+1} | X_n = x_n)
+\end{equation}
 	\end{defn}
 \end{screen}
 
@@ -175,6 +177,37 @@ $\mathcal{J}$は有限個の状態の集合とする．$\mathcal{J}$のことを
 マルコフ性が無ければこの計算の2行目から3行目への変形はできない．それが意味するのは，$\mathbb{P}(X_0 = x_0 , X_1 = x_1, X_2 = x_2)$は$p,q,\pi_0$を用いて表すことができないということである．
 
 \subsection{遷移関数と初期分布}
+$(X_{n})_{n \in \NN}, n \ge 0 $を状態空間$\mathcal{J}$を持つマルコフ鎖とする．関数$P(x,y) (x,y \in \mathcal{J})$を次で定める．
+\begin{equation}
+	P(x,y) = \mathbb{P}(X_1 = y| X_0 = x) \,[x,y \in \mathcal{J}]
+\end{equation}
+これを鎖の遷移関数と呼ぶ．当然，
+\begin{align}
+	P(x,y) \ge 0 \\\
+	\sum_y P(x,y) = 1
+\end{align}
+である．この文書ではマルコフ鎖は変化しない遷移確率をもつとしていたので，すなわち，
+\begin{equation}
+	\mathbb{P}(X_{n+1} = y| X_n = x) = P(x,y) \,[n \ge 1]
+\end{equation}
+が成立する．これと，マルコフ性より，
+\begin{equation}
+	\mathbb{P}(X_{n+1} = x_{n+1} | X_0 = x_0 , \cdots , X_n = x_n) = P(x,y)	
+\end{equation}
+が成り立つ．
+
+また，関数$\pi_0$を次で定義する．
+\begin{equation}
+	\pi_0(x) = \mathbb{P}(X_0 = x ) \, [x \in \mathcal{J}]
+\end{equation}
+次が成り立つことは明らかである．
+\begin{align}
+	\pi_0(x) \ge 0 \label{pi_hihu}\\
+	\sum_x \pi_0(x) = 1 \label{pi_sum}
+\end{align}
+
+
+
 
 
 
