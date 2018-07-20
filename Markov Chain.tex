@@ -97,7 +97,7 @@
 この文書は卒研セミナーでのマルコフ連鎖のセミナーについて，毎回その要点をまとめるものである．気を付けなければいけないと思ったことは詳しく書く．また僕自身にとって簡単であるようなことは省略する．なお用いる教科書はPaul G. Hoel,Sideney C. Port, Charles J. Stone 著のIntroduction to Stochastic Processes．
 \end{abstract}
 
-\section{マルコフ鎖の定義と簡単な性質，いくつかの例}\footnote{Markov Chainの訳は本によってさまざま．マルコフ系列だったりマルコフ過程だったりします．ここでは読んでいる教科書の用語を直訳することを意識してマルコフ鎖，マルコフ連鎖とします．}
+\section{Markov Chain}\footnote{Markov Chainの訳は本によってさまざま．マルコフ系列だったりマルコフ過程だったりします．ここでは読んでいる教科書の用語を直訳することを意識してマルコフ鎖，マルコフ連鎖とします．}
 
 \subsection{マルコフ性の定義}
 $\mathcal{J}$は有限個の状態の集合とする．$\mathcal{J}$のことを{\bf 状態空間}とよぶ．離散時間$n = 0,1,2,\cdots$が与えられていて$X_n$はそれぞれの時刻$n$における状態を表すものする．($n \ge 0$)．この状態を数値に対応させることで$X_n$はある確率空間上の確率変数とみなす．
@@ -246,6 +246,46 @@ $\xi_1,\xi_2 \cdots$ は整数値の独立な確率変数で各$\xi_i$の確率�
 &=\pi_0(x_0)P(x_1 , x_0)\cdots P(x_n , x_{n-1})
 \end{align*}
 （ランダムに整数が選ばれるというようなかなり人工的なマルコフ鎖のモデルだなと思うなど）
+
+\subsubsection{Gambler's ruin chain}
+あるギャンブラーが賭けをする．彼ははじめにいくらかお金を持っていて，毎ターンゲームをする．勝利すれば1ドル手に入れ，負けたら1ドル失う．引き分けはないものとする．ゲームに勝利する確率は$p$，負ける確率は$q:= 1-p$とする．所持金が尽きてしまった時，もうそれ以上ゲームができなくなってしまうのでそれ以降ずっと彼の所持金は0のままであるとする．$X_n$を$n$ターン目のゲーム終了時に彼が持っている所持金とする．この時，$(X_n)$はマルコフ鎖を成し，遷移関数は次で与えられる．
+\begin{equation}
+	P(x,y) = 
+	\begin{cases}
+		p, & (y = x + 1) \\
+		q, & (y = x - 1) \\
+		0, & (\text{otherwise})
+	\end{cases}
+\end{equation}
+状態空間は$\NN$である．ある$n$で$X_n = 0$となってしまった場合，すべての$m \ge n$について$X_m = 0$のままであることに注意しよう．このような状態を普通absorbing stateという．
+\begin{screen}
+	\begin{defn}[absorbing state]
+	状態$a \in \mathcal{J}$がabsorbing stateとは，$P(a,a) = 1$であること，すなわち$P(a,y) = 0 (y \neq a)$のときに言う．
+	\end{defn}
+\end{screen}
+
+\subsection{遷移関数を用いたマルコフ鎖の計算}
+遷移関数を用いてマルコフ鎖における様々な条件付き確率を計算しよう．
+\begin{screen}
+\begin{prop}
+\begin{align}
+&\mathbb{P}(X_{n+1} = x_{n+1}, \cdots,X_{n+m}=x_{n+m} | X_0 = x_0 ,\cdots, X_n = x_n) \notag \\
+ = &P(x_n,x_{n+1})\cdots P(x_{n+m-1} ,x_{n+m}) 
+\end{align}
+\end{prop}
+\end{screen}
+\begin{proof}
+左辺を条件付き確率の定義に従って変形し，式(\ref{markov feature})を用いて計算すると右辺を得る．
+\end{proof}
+
+
+
+
+
+
+
+
+
 
 
 
