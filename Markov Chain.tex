@@ -270,18 +270,55 @@ $\xi_1,\xi_2 \cdots$ は整数値の独立な確率変数で各$\xi_i$の確率�
 \begin{prop}
 \begin{align}
 &\mathbb{P}(X_{n+1} = x_{n+1}, \cdots,X_{n+m}=x_{n+m} | X_0 = x_0 ,\cdots, X_n = x_n) \notag \\
- = &P(x_n,x_{n+1})\cdots P(x_{n+m-1} ,x_{n+m}) 
+ = &P(x_n,x_{n+1})\cdots P(x_{n+m-1} ,x_{n+m}) \label{15} 
 \end{align}
 \end{prop}
 \end{screen}
 \begin{proof}
 左辺を条件付き確率の定義に従って変形し，式(\ref{markov feature})を用いて計算すると右辺を得る．
 \end{proof}
+式(\ref{15})は次のように書き直しておくと今後便利である．
+\begin{align}
+&\mathbb{P}(X_{n+1} = y_{1}, \cdots,X_{n+m}=y_{m} | X_0 = x_0 ,\cdots,X_{n-1}= x_{n-1}, X_n = x) \notag \\
+ = & P(x,y_{1})\cdots P(y_{m-1} ,y_{m}) \label{16}
+\end{align}
+式(\ref{16})と4(a) \footnote{後で主張を書いておくこと} より，$A_0,A_1,\cdots,A_{n-1} \subset \mathcal{J}$に対して，
+\begin{align}
+&\mathbb{P}(X_{n+1} = y_{1}, \cdots,X_{n+m}=y_{m} | X_0 \in A_0 ,\cdots,X_{n-1} \in A_{n-1}, X_n = x) \notag \\
+ = & P(x,y_{1})\cdots P(y_{m-1} ,y_{m}) \label{17}
+\end{align}
+これと，4(b)\footnote{これもあとで主張を書いておく}より，$B_1,\cdots,B_{m} \subset \mathcal{J}$とすると，
+\begin{align}
+&\mathbb{P}(X_{n+1} \in B_1, \cdots,X_{n+m} \in B_m | X_0 \in A_0 ,\cdots,X_{n-1} \in A_{n-1}, X_n = x) \notag \\
+ = &\sum_{y_1 \in B_1} \cdots \sum_{y_m \in B_m} P(x,y_{1})\cdots P(y_{m-1} ,y_{m}) \label{18}
+\end{align}
 
-
-
-
-
+\begin{screen}
+	\begin{defn}
+		$x$が$m$ステップで$y$にうつりゆく確率を返す$m-step$の遷移関数$P^m (x,y)$は次で定義される．
+		\begin{align}
+			P^m(x,y) = \sum_{y_1} \cdots \sum_{y_{m-1}} P(x,y_1) \cdots P(y_{m-1},y_{m}) \label{19}
+		\end{align}
+		ただし，$m=1$のとき，$P^1(x,y) = P(x,y)$とし，$m=0$の時は，
+		\[P^0(x,y) = \begin{cases}
+			1 & (x=y) \\
+			0 & (\text{otherwise})
+\end{cases}\]
+	\end{defn}
+\end{screen}
+式(\ref{18})で$B_1 = \cdots = B_{m-1} = \mathcal{J}, B_m = \{y\}$とすると，右辺が式(\ref{19})の右辺と同じになるから，
+\begin{equation}
+	\mathbb{P}(X_{n+m} = y | X_0 \in A_0 ,\cdots,X_{n-1} \in A_{n-1}, X_n = x) = P^m(x,y) \label{20}
+\end{equation}
+この式において$A_0 = A_{n-1} = \mathcal{J}$とおけば，
+\begin{equation}
+	\mathbb{P}(X_{n+m} = y | X_n = x) = P^m(x,y) \label{21}
+\end{equation}
+が得られるし，$A_0 = \{z\} ,A_1 = \cdots = A_{n-1} = \mathcal{J}$とすれば，
+\begin{equation}
+	\mathbb{P}(X_{n+m} = y | X_0 = z , X_n = x) = P^m(x,y)  \label{22}
+\end{equation}
+が得られる．
 
 
 
