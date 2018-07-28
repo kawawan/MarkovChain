@@ -318,7 +318,101 @@ $\xi_1,\xi_2 \cdots$ は整数値の独立な確率変数で各$\xi_i$の確率�
 \begin{equation}
 	\mathbb{P}(X_{n+m} = y | X_0 = z , X_n = x) = P^m(x,y)  \label{22}
 \end{equation}
-が得られる．
+が得られる．4(c)\footnote{主張を書いておく．式変形の一行目から二行目で用いているぽい}より，
+\begin{align*}
+	P^{n+m}(x,y) &= \mathbb{P}(X_{n+m} = y | X_0 = x) \\
+	&= \sum_{z \in \mathcal{J}} \mathbb{P}(X_n = z | X_0 = x) \mathbb{P}(X_{n+m} = y | X_0 = x, X_n = z) \\
+	&= \sum_{z \in \mathcal{J}} P^n(x,z)\mathbb{P}(X_{n+m} = y | X_0 = x, X_n = z)
+\end{align*}
+が分かるから式(\ref{22})を用いると，
+\begin{equation}
+	P^{n+m} (x,y) =  \sum_{z \in \mathcal{J}} P^n(x,z) P^m(z,y) \label{23}
+\end{equation}
+とあらわせる．状態空間が有限集合のMarkov Chainを考えているなら，式(\ref{23})は$P^n$を行列$P$の$n$乗として見てもよいことになる．詳しくは後に語られる．
+
+初期分布も計算に組み込もう．$\pi_0$をMarkov Chain の初期分布関数とすると，
+\begin{align*}
+	P(X_n = y) &= \sum_{x \in \mathcal{J}}\mathbb{P} (X_0 = x, X_n = y) \\
+	&= \sum_{x \in \mathcal{J}} \mathbb{P}(X_0 = x) \mathbb{P}(X_n = y | X_0 = x)
+\end{align*}
+だから，
+\begin{equation}
+	P(X_n = y) = \sum_{x \in \mathcal{J}} \pi_0(x) P^n(x,y) \label{24}
+\end{equation}
+を得る．遷移関数を使うことで別のアプローチで$\mathbb{P}(X_{n+1} = y)$を計算することができる．
+\begin{align*}
+\mathbb{P}(X_{n+1} = y) &= \sum_{x \in \mathcal{J}} \mathbb{P}(X_n = x, X_{n+1} = y) \\
+&= \sum_{x \in \mathcal{J}} \mathbb{P}(X_n = x)\mathbb{P}(X_{n+1} = y | X_n = x) \\
+\end{align*}
+より，
+\begin{equation}
+\mathbb{P}(X_{n+1} = y) = \sum_{x \in \mathcal{J}} \mathbb{P}(X_n = x) P(x,y) \label{25}
+\end{equation}
+という漸化式が得られるので初期分布$\pi_0(x)$から始めて帰納的に計算することができる．
+
+ここで新しい記号を導入する．
+\begin{screen}
+	\begin{defn}
+	$P_x (・)$は状態$x$からスタートするMarkov Chainにおける様々な事象の確率を表すことにする
+	\end{defn}
+\end{screen}
+例えば，$P_x(X_1 \neq a,X_2 \neq a,X_3 = a)$とは，$x$からスタートするMarkov Chainが時刻3で初めて状態$a$に到達するような確率を表している．
+
+\subsubsection{Hitting Times}
+\begin{screen}
+\begin{defn}[Hitting Times]
+$A$を$\mathcal{J}$の部分集合とする．$T_A$を$A$のHitting Timeといい，次で定義する．
+\[T_A = min(n > 0 | X_n \in A)\]
+ただし，$X_n \in T_A$となる$n$がないときは$T_A = \infty$とする．
+$A$が一点集合$\{a\}$であったとき，$T_{\{a\}}$を単に$T_a$と書くことにする．
+\end{defn}
+\end{screen}
+$T_A$は考えているMarkov Chainが初めて$A$と「ぶつかる」時刻とみてよい．次の等式はHitting Timeを扱うときによく使う大切な式である．
+
+\begin{screen}
+	\begin{lem} \label{lem1-2}
+	\[P^n (x,y) = \sum_{m = 1}^{n} P_x(T_y = m)P^{n-m}(y,y)\]
+	\end{lem}
+\end{screen}
+\begin{proof}
+$\{T_y = m, X_n =y\} \quad (1 \leq m \leq n)$という事象は$m$ごとに互いに素である．\footnote{$m$が変化するとは$T_y$の値が変わってしまうことだから，$\{y\}$のHitting Timeが異なるということ．よって，必ず自傷同士の共通部分は空集合になる}
+また，
+\[ \{X_n = y\} = \bigcup_{m=1}^{n} \{ T_y = m , X_n = y \} \]
+である．(左辺を$T_y$の値について分解した．)
+よって，
+\begin{align*}
+P^n(x,y) &= P_x(X_n = y) \\
+&= \sum_{m = 1}^{n} P_x(T_y =m, X_n = y) 　\\
+&= \sum_{m= 1}^{n} P_x(T_y = m) \mathbb{P}(X_n = y | X_0 = x, T_y = m) \\
+&= \sum_{m= 1}^{n} P_x(T_y = m) \mathbb{P}(X_n = y | X_0 = x, X_1 \neq y, \cdots ,X_{m-1} \neq y, X_m =y) \\
+&= \sum_{m= 1}^{n} P_x(T_y = m)P^{n-m}(y,y) 
+\end{align*}
+一行目から二行目は各事象はdisjointより．四行目から五行目は式(\ref{22})を適用した．
+\end{proof}
+
+\begin{ex}
+$a$がabsorbing stateなら$P^n(x,a) = P_x(T_a \leq n)$である．ただし，$P_x(T_a \leq n) = \displaystyle \sum_{m = 1}^n P_x(T_a = m)$である．実際，$P^{n-m}(a,a) = 1$であるから補題\ref{lem1-2}を適用すると，
+\begin{align*}
+P_x(T_a \leq n) &= \sum_{m = 1}^n P_x(T_a = m)P^{n-m}(a,a) \\
+&= \sum_{m = 1}^n P_x(T_a = m) \\
+&= P_x(T_a \leq n)
+\end{align*}
+\end{ex}
+
+$T_y = 1,2$のような時に観察すると，次が成り立つことが予想できる．
+\begin{equation}
+	P_x(T_y = n+1) \sum_{z \neq y}P(x,z)P_z(T_y = n) \quad [n \geq 1]
+\end{equation}
+
+
+
+
+
+
+
+
+
+
 
 
 
