@@ -179,7 +179,7 @@ $\mathcal{J}$は有限個の状態の集合とする．$\mathcal{J}$のことを
 \subsection{遷移関数と初期分布}
 $(X_{n})_{n \in \NN}, n \ge 0 $を状態空間$\mathcal{J}$を持つマルコフ鎖とする．関数$P(x,y) (x,y \in \mathcal{J})$を次で定める．
 \begin{equation}
-	P(x,y) = \mathbb{P}(X_1 = x| X_0 = y) \,[x,y \in \mathcal{J}]
+	P(x,y) = \mathbb{P}(X_1 = y| X_0 = x) \,[x,y \in \mathcal{J}]
 \end{equation}
 これを鎖の遷移関数と呼ぶ．当然，
 \begin{align}
@@ -188,11 +188,11 @@ $(X_{n})_{n \in \NN}, n \ge 0 $を状態空間$\mathcal{J}$を持つマルコフ
 \end{align}
 である．この文書ではマルコフ鎖は変化しない遷移確率をもつとしていたので，すなわち，
 \begin{equation}
-	\mathbb{P}(X_{n+1} = x| X_n = y) = P(x,y) \,[n \ge 1]
+	\mathbb{P}(X_{n+1} = y| X_n = x) = P(x,y) \,[n \ge 1]
 \end{equation}
 が成立する．これと，マルコフ性より，
 \begin{equation}
-	\mathbb{P}(X_{n+1} = x | X_0 = x_0 , \cdots , X_n = y) = P(x,y)	
+	\mathbb{P}(X_{n+1} = y | X_0 = x_0 , \cdots , X_n = x) = P(x,y)	
 \end{equation}
 が成り立つ．
 
@@ -214,11 +214,11 @@ $(X_{n})_{n \in \NN}, n \ge 0 $を状態空間$\mathcal{J}$を持つマルコフ
 であるから，
 \begin{align*}
 	& \mathbb{P}(X_0 = x_0 , X_1 = x_1, X_2 = x_2) \\
-	=& \pi_0(x_0) P(x_1,x_0)P(x_2,x_1)
+	=& \pi_0(x_0) P(x_0,x_1)P(x_1,x_2)
 \end{align*}
 これを帰納的に計算することで，次を得る．
 \begin{equation}
-\mathbb{P}(X_0 = x_0 , \cdots , X_n = x_n) = \pi_0(x_0) P(x_1,x_0)P(x_2,x_1)\cdots P(x_n,x_{x-1}) \label{markov feature} 
+\mathbb{P}(X_0 = x_0 , \cdots , X_n = x_n) = \pi_0(x_0) P(x_0,x_1)P(x_1,x_2)\cdots P(x_{n-1},x_n) \label{markov feature} 
 \end{equation}
 
 ここで定義をまとめておく．
@@ -356,8 +356,11 @@ $\xi_1,\xi_2 \cdots$ は整数値の独立な確率変数で各$\xi_i$の確率�
 	$P_x (・)$は状態$x$からスタートするMarkov Chainにおける様々な事象の確率を表すことにする
 	\end{defn}
 \end{screen}
-例えば，$P_x(X_1 \neq a,X_2 \neq a,X_3 = a)$とは，$x$からスタートするMarkov Chainが時刻3で初めて状態$a$に到達するような確率を表している．
-
+例えば，$P_x(X_1 \neq a,X_2 \neq a,X_3 = a)$とは，$x$からスタートするMarkov Chainが時刻3で初めて状態$a$に到達するような確率を表している．$P_x()$を用いて式(\ref{18})を次のように書くことができる．
+\begin{align}
+&\mathbb{P}(X_{n+1} \in B_1, \cdots,X_{n+m} \in B_m | X_0 \in A_0 ,\cdots,X_{n-1} \in A_{n-1}, X_n = x) \notag \\
+ = &P_x(X_1 \in B_1,\cdots, X_m \in B_m) \label{26}
+\end{align}
 \subsubsection{Hitting Times}
 \begin{screen}
 \begin{defn}[Hitting Times]
@@ -397,15 +400,28 @@ P_x(T_a \leq n) &= \sum_{m = 1}^n P_x(T_a = m)P^{n-m}(a,a) \\
 &= \sum_{m = 1}^n P_x(T_a = m) \\
 &= P_x(T_a \leq n)
 \end{align*}
+となる．
 \end{ex}
 
 $T_y = 1,2$のような時に観察すると，次が成り立つことが予想できる．
 \begin{equation}
-	P_x(T_y = n+1) \sum_{z \neq y}P(x,z)P_z(T_y = n) \quad [n \geq 1]
+	P_x(T_y = n+1) =  \sum_{z \neq y}P(x,z)P_z(T_y = n) \quad [n \geq 1]　
 \end{equation}
+直観的には，まず最初の1ステップで$y$ではない状態$z$に行き，そこから$z$をスタートとするMarkov Chainだと思い，その$\{y\}$のHitting Timeが$n$，つまり$P_z(T_y = n)$を考えればよい．式(\ref{26})からも求めることができる．$x$から始まるMarkov Chainを考える．$\mathbb{P}(X_0 = x) = 1$であることに注意しておくと次の計算ができる．
+\begin{align*}
+P_x(T_y = n+1) =& \mathbb{P}(X_0 = x ,X_1 \neq y, \cdots, X_n \neq y, X_{n+1} = y) \\
+=& \mathbb{P}(X_2 \neq y,\cdots,X_n\neq y, X_{n+1} = y | X_0 = x, X_1 \neq y)\\
+& \mathbb{P}(X_0 = x,X_1 \neq y) \\
+=& \mathbb{P}(X_2 \neq y,\cdots,X_n\neq y, X_{n+1} = y | X_0 = x, X_1 \neq y)\\
+& \mathbb{P}(X_1 \neq y | X_0 = x)\mathbb{P}(X_0 = x) \\
+=& \mathbb{P}(X_2 \notin \{y\},\cdots,X_n \notin \{y\}, X_{n+1} \in \{y\} | X_0 \in \{x\}, X_1 \notin \{y\})  \\
+& \mathbb{P}(X_1 \neq y | X_0 = x) \\
+=& \sum_{z \neq y}P_z(X_1\notin \{y\} , \cdots , X_{n-1} \notin \{y\}, X_n \notin \{y\}) P(x,z) \\
+=& \sum_{z \neq y}P_z(X_1\neq y , \cdots , X_{n-1} \neq y, X_n = y) P(x,z) \\
+=& \sum_{z \neq y}P_z(T_y = n) P(x,z)
+\end{align*}
 
-
-
+\subsubsection{遷移行列}
 
 
 
