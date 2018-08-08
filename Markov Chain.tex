@@ -158,11 +158,11 @@ $\mathcal{J}$は有限個の状態の集合とする．$\mathcal{J}$のことを
 \end{equation}
 総和を計算すると，
 \begin{equation}
-	\mathbb{P}(X_n = 0) = \frac{q}{p+q} + (1- p- q)^{n} \left( \pi_0(0) - \frac{q}{p+ q} \right)
+	\mathbb{P}(X_n = 0) = \frac{q}{p+q} + (1- p- q)^{n} \left( \pi_0(0) - \frac{q}{p+ q} \right) \label{3}
 \end{equation}
 が得られる．したがって，
 \begin{equation}
-	\mathbb{P}(X_n = 1) = \frac{p}{p+q} + (1- q- p)^{n} \left( \pi_0(1) - \frac{p}{q+ p} \right)
+	\mathbb{P}(X_n = 1) = \frac{p}{p+q} + (1- q- p)^{n} \left( \pi_0(1) - \frac{p}{q+ p} \right) \label{4}
 \end{equation}
 ここで，$p=q=1$でも$p=q=0$でもないとする．すなわち，$|1-p-q| < 1$であるから，$n \to \infty$とすると，
 \[\lim_{n \to \infty} \mathbb{P}(X_n = 0) = \frac{q}{p+q}\]
@@ -361,6 +361,8 @@ $\xi_1,\xi_2 \cdots$ は整数値の独立な確率変数で各$\xi_i$の確率�
 &\mathbb{P}(X_{n+1} \in B_1, \cdots,X_{n+m} \in B_m | X_0 \in A_0 ,\cdots,X_{n-1} \in A_{n-1}, X_n = x) \notag \\
  = &P_x(X_1 \in B_1,\cdots, X_m \in B_m) \label{26}
 \end{align}
+この式は後の議論を進めるなかでの計算でよく使割れる．
+
 \subsubsection{Hitting Times}
 \begin{screen}
 \begin{defn}[Hitting Times]
@@ -420,8 +422,90 @@ P_x(T_y = n+1) =& \mathbb{P}(X_0 = x ,X_1 \neq y, \cdots, X_n \neq y, X_{n+1} = 
 =& \sum_{z \neq y}P_z(X_1\neq y , \cdots , X_{n-1} \neq y, X_n = y) P(x,z) \\
 =& \sum_{z \neq y}P_z(T_y = n) P(x,z)
 \end{align*}
+見やすく書いておくと，
+\begin{equation}
+P_x(T_y = n+1) = \sum_{z \neq y}P_z(T_y = n) P(x,z)
+\end{equation}
+$n+1$ステップ目で初めて$y$に到達する確率は，まず，$1$ステップ目で$y$ではない$z$という状態に動いて，その後$n$ステップで$y$に到達する確率を全て足し合わせればよい．
 
 \subsubsection{遷移行列}
+状態空間を$\mathcal{J} = \{0,1, \cdots , d\}$とする．すると遷移関数$P : \mathcal{J} \times \mathcal{J} \rightarrow [0,1]$を行列として捉えることができる．その行列は$(d+1) \times (d+1)$行列で第$(i,j)$成分は$P(i,j)$である．
+\[
+\begin{pmatrix}
+P(0,0) & \cdots & P(0,d) \\
+\vdots & \ddots & \vdots \\
+P(d,0) & \cdots & P(d,d)
+\end{pmatrix}
+\]
+このように定義すると，上記の行列の積と$n-$step遷移関数を同一視できる．式(\ref{23})で$n=m=1$とすれば
+\begin{equation}
+	P^{2}(x,y) = \sum_z P(x,z)P(z,y)
+\end{equation}
+となり，通常の行列の積の$(x,y)$成分の定義と同じなので$2-$ステップ遷移関数と遷移行列$P$の2乗は同一視してよい．次に式(\ref{23})で$m=1$とすれば
+\begin{equation}
+	P^{n+1}(x,y) = \sum_n P^n(x,z)P(z,y)
+\end{equation}
+となり，帰納的に，$n-$ステップ遷移関数$P^n$は遷移行列$P$の$n$乗と同一視してよい．
+
+初期分布$\pi_0$も$d+1$個の成分を持つ行ベクトルと考えることができる．
+\[
+\pi_0 = (\pi_0(0), \cdots , \pi_0(d))
+\]
+$\pi_n$を$d+1$個の成分を持つ行ベクトルで，
+\[
+\pi_n = (\mathbb{P}(X_n =0), \cdots , \mathbb{P}(X_n = d))
+\]
+とすれば，式(\ref{24})(\ref{25})より
+\begin{align*}
+\pi_n = \pi_0 P^n \\
+\pi_{n+1} = \pi_n P
+\end{align*}
+が分かる．
+
+\begin{ex}
+状態が二つしかないMarkov Chainを考える．遷移行列は
+\[P=
+\begin{pmatrix}
+1-p & p \\
+q & 1-q
+\end{pmatrix}
+\]
+で与えられているものとする(ただし$p+q > 0$とする)．
+\end{ex}
+式(\ref{3})(\ref{4})より，それぞれの場合で$\pi_0(0) = 1 ,\pi_0(1) = 1$とすれば，
+\begin{align*}
+P^n(0,0) = \frac{q}{p+q} + (1-p-q)^n \frac{p}{p+q} \\
+P^n(0,1) = \frac{p}{p+q} - (1-p-q)^n \frac{p}{p+q} \\
+\intertext{同様に，}
+P^n(1,0) = \frac{q}{p+q} + (1-p-q)^n \frac{q}{p+q} \\
+P^n(1,1) = \frac{p}{p+q} - (1-p-q)^n \frac{q}{p+q}
+\end{align*}
+これで各成分が出そろったので，遷移行列の$n$乗は
+\[
+P^n = \frac{1}{p+q} \begin{pmatrix}
+q & p \\
+q & p
+\end{pmatrix}
++ \frac{(1-p-q)^n}{p+q} \begin{pmatrix}
+p & -p \\
+-q & q
+\end{pmatrix}
+\]
+と計算できる．
+
+\subsection{Transient state と Recurrent state}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
